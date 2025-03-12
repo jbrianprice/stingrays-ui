@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { X } from "lucide-react"
 
 export default function Modal({ title, children, isOpen, handleClose }) {
     const closeModal = () => handleClose()
@@ -10,7 +11,7 @@ export default function Modal({ title, children, isOpen, handleClose }) {
                     <div className="w-full flex gap-6 justify-between">
                         {title && <h2 className="text-xl font-semibold mb-4">{title}</h2>}
                         <button onClick={closeModal} className="ml-auto flex-none tertiary">
-                            X
+                            <X size={28} /> 
                         </button>
                     </div>
                     {children}
