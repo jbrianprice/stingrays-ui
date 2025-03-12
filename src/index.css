@@ -11,7 +11,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  @apply text-stone-950
+  @apply text-stone-950 dark:text-white
 }
 
 h2 {
@@ -49,7 +49,7 @@ button.primary {
 
 button:hover,
 button.primary:hover {
-  @apply bg-cyan-950
+  @apply bg-cyan-950 dark:bg-cyan-400
 }
 
 button.tertiary, 
@@ -59,7 +59,7 @@ button.secondary {
 
 button.tertiary:hover,
 button.secondary:hover {
-  @apply text-cyan-950 border-cyan-950 bg-transparent
+  @apply text-cyan-950 border-cyan-950 dark:text-cyan-400 dark:border-cyan-400 bg-transparent
 }
 
 button.secondary {
@@ -77,7 +77,7 @@ button:focus-visible {
 }
 
 label {
-  @apply text-sm text-stone-600 font-semibold
+  @apply text-sm text-stone-600 dark:text-stone-400 font-semibold
 }
 
 input, select {
@@ -96,7 +96,7 @@ select:required:invalid {
 }
 
 .badge {
-  @apply rounded-xl py-0.5 px-2  bg-cyan-300 font-semibold
+  @apply rounded-xl py-0.5 px-2  bg-cyan-300 font-semibold text-stone-800
 }
 
 .error-message {

@@ -14,11 +14,9 @@ export const routes  = createBrowserRouter([
     {
       path: '/roster',
       element: <PageWrapper><Roster /></PageWrapper>,
-      children: [
-        {
-          path: ':playerId',
-          element: <PageWrapper><PlayerProfile /></PageWrapper>,
-        },
-      ],
+    },
+    {
+      path: '/player/:playerId',
+      element: <PageWrapper><PlayerProfile /></PageWrapper>,
     },
   ]);

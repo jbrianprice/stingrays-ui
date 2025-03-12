@@ -3,13 +3,16 @@ import { firestoreDB } from "../firebaseConfig" // Import your Firebase configur
 import { collection, getDocs, onSnapshot, addDoc } from "firebase/firestore"
 import AddPlayer from "../components/addPlayer"
 import Modal from "../components/modal"
+import { useNavigate } from "react-router-dom"
 
 function Roster() {
+    const navigate = useNavigate();
     const [data, setData] = useState([])
     const [roster, setRoster] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [addFlow, showAddFlow] = useState(false)
+
 
     const collectionName = "roster"
 
@@ -83,7 +86,7 @@ function Roster() {
     }
 
     if (loading) {
-        return <p>Loading data...</p>
+        return <p>Loading roster...</p>
     }
 
     if (error) {
@@ -97,16 +100,16 @@ function Roster() {
                 {roster.map((item) => (
                     <li
                         key={item.id}
-                        className="flex items-center gap-6 flex-wrap justify-between group border-b py-2 border-slate-200"
+                        className="flex items-center gap-6 justify-between group border-b border-slate-200 dark:border-slate-800"
                     >
-                        <p className="flex items-baseline gap-2 text-xl">
+                        <p className="flex items-baseline gap-2 text-xl py-2 cursor-pointer w-full" onClick={() => navigate(`/player/${item.id}`)}>
                             <span className="badge">#{item.number}</span>
                             <span className="font-semibold">
                                 {item.firstName} {item.lastName.slice(0, 1)}.
                             </span>
                             <span className="text-xs text-slate-500">{item.team.teamName}</span>
                         </p>
-                        <button className="tertiary text-xs hidden group-hover:block">Edit</button>
+                        <button className="tertiary text-xs md:hidden group-hover:block">Edit</button>
                     </li>
                 ))}
             </ul>
