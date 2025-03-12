@@ -14,6 +14,10 @@
   @apply text-stone-950 dark:text-white
 }
 
+body {
+  @apply bg-slate-100 dark:bg-neutral-900 m-0 
+}
+
 h2 {
   @apply text-2xl font-light
 }
@@ -23,12 +27,10 @@ form {
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  @apply text-cyan-700 no-underline
 }
 a:hover {
-  color: #535bf2;
+  @apply text-cyan-950 dark:text-cyan-400
 }
 
 body {
@@ -38,8 +40,7 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  @apply text-2xl md:text-4xl
 }
 
 button,
@@ -60,6 +61,10 @@ button.secondary {
 button.tertiary:hover,
 button.secondary:hover {
   @apply text-cyan-950 border-cyan-950 dark:text-cyan-400 dark:border-cyan-400 bg-transparent
+}
+
+button.tertiary {
+  @apply px-0
 }
 
 button.secondary {
@@ -101,4 +106,20 @@ select:required:invalid {
 
 .error-message {
   @apply text-sm text-red-800
+}
+
+.card {
+  @apply shadow rounded-lg bg-white dark:bg-neutral-950 p-4
+}
+
+.card:hover {
+  @apply -translate-y-0.5 shadow-md
+}
+
+.card h3 {
+  @apply font-thin text-2xl
+}
+
+.card p {
+  @apply text-sm text-slate-600 text-balance
 }

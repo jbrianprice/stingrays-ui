@@ -95,7 +95,7 @@ function Roster() {
 
     return (
         <div className="flex flex-col gap-6 w-full">
-            <h1>Roster</h1>
+            <h1>{roster[0].team.teamName}</h1>
             <ul className="w-full">
                 {roster.map((item) => (
                     <li
