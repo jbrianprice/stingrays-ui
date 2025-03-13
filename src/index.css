@@ -96,6 +96,7 @@ input:focus, select:focus {
   @apply shadow-md;
 }
 
+
 input:required:invalid, 
 select:required:invalid {
   @apply border-red-800
@@ -110,6 +111,7 @@ select:required:invalid {
 }
 
 button.card,
+.static-card,
 .card {
   @apply shadow rounded-lg bg-white dark:bg-neutral-950 p-4
 }
@@ -118,6 +120,7 @@ button.card,
   @apply -translate-y-0.5 shadow-md
 }
 
+.static-card h3,
 .card h3 {
   @apply font-thin text-2xl
 }

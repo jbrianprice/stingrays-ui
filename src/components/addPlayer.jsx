@@ -2,6 +2,20 @@ import React, { useEffect } from "react"
 import { useState } from "react"
 import { getDocs, collection } from "firebase/firestore"
 import { firestoreDB } from "../firebaseConfig"
+import Select from "react-select"
+
+const fieldPositions = [
+    "Pitcher",
+    "Catcher",
+    "First Base",
+    "Second Base",
+    "Third Base",
+    "Shortstop",
+    "Left Field",
+    "Center Field",
+    "Right Field",
+    "Utility",
+]
 
 export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = [] }) {
     const [formData, setFormData] = useState({
@@ -9,6 +23,7 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
         lastName: "",
         birthday: undefined,
         number: undefined,
+        position: [],
         activeStatus: true,
         dateAdded: new Date(),
         dateModified: new Date(),
@@ -21,6 +36,7 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
     const [teamsError, setTeamsError] = useState()
     const [submitted, isSubmitted] = useState()
     const [duplicate, isDuplicate] = useState(false)
+    const [selectedPositions, setSelectedPositions] = useState([])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,6 +58,18 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
         }
         fetchData()
     }, [])
+
+    useEffect(()=> {
+        setFormData({...formData, positions: selectedPositions})
+    }, [selectedPositions])
+
+    const handleCheckboxChange = (position) => {
+        setSelectedPositions((prev) =>
+            prev.includes(position) ? prev.filter((pos) => pos !== position) : [...prev, position]
+        )
+    }
+
+    console.log(formData)
 
     const handleChange = (e) => {
         const { name, value, checked } = e.target
@@ -73,11 +101,10 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
             handleSubmit(formData)
             handleCancel()
         }
-
     }
 
     return (
-        <div className="p-4 flex flex-col gap-3">
+        <div className="p-4 flex flex-col gap-4">
             <form onSubmit={(e) => handleValidateSubmit(e)} className="mt-4">
                 <div className="flex flex-col md:flex-row gap-3">
                     <div className="input-wrapper">
@@ -129,6 +156,24 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
                     </div>
                 </div>
                 <div className="iput-wrapper">
+                    <label>
+                        Positions <span className="font-normal">(optional)</span>
+                    </label>
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                        {fieldPositions.map((pos) => (
+                            <label key={pos} className="flex items-center gap-x-2">
+                                <input
+                                    type="checkbox"
+                                    value={pos}
+                                    checked={selectedPositions.includes(pos)}
+                                    onChange={() => handleCheckboxChange(pos)}
+                                />
+                                <span>{pos}</span>
+                            </label>
+                        ))}
+                    </div>
+                </div>
+                <div className="iput-wrapper">
                     <div>
                         <label>Team</label>
                         {teamsLoading ? (
@@ -171,9 +216,7 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
                         Add
                     </button>
                 </div>
-                {duplicate && <p className="error-message">
-                    That player may already exist
-                </p>}
+                {duplicate && <p className="error-message">That player may already exist</p>}
             </form>
         </div>
     )

@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom"
-
 import React, { useEffect, useState } from "react"
 import { doc, getDoc } from "firebase/firestore"
 import { firestoreDB } from "../firebaseConfig"
 import { ArrowLeft } from "lucide-react"
+import BreadCrumb from "../components/breadCrumb"
 
 const PlayerProfile = () => {
     const { playerId } = useParams()
@@ -42,7 +42,7 @@ const PlayerProfile = () => {
 
     return (
         <div>
-            <button className="tertiary flex items-center gap-1 mb-4"><ArrowLeft size="1rem" /> Full roster</button>
+            <BreadCrumb label = "Full roster" path="/roster" />
             <h2>{firstName} {lastName.slice(0,1)}.</h2>
             <p>{formattedBday.toLocaleString('en', { month: 'long', day: '2-digit', year: 'numeric' })}</p>
         </div>
