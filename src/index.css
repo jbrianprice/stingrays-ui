@@ -58,9 +58,10 @@ button.secondary {
   @apply  text-cyan-700 border-cyan-700 bg-transparent
 }
 
+button.card:hover,
 button.tertiary:hover,
 button.secondary:hover {
-  @apply text-cyan-950 border-cyan-950 dark:text-cyan-400 dark:border-cyan-400 bg-transparent
+  @apply text-cyan-950 border-cyan-950 dark:text-cyan-400 dark:border-cyan-400
 }
 
 button.tertiary {
@@ -108,6 +109,7 @@ select:required:invalid {
   @apply text-sm text-red-800
 }
 
+button.card,
 .card {
   @apply shadow rounded-lg bg-white dark:bg-neutral-950 p-4
 }

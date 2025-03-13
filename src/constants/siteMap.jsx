@@ -20,6 +20,10 @@ export const routes  = createBrowserRouter([
       path: '/player/:playerId',
       element: <PageWrapper><PlayerProfile /></PageWrapper>,
     },
+    {
+      path: '/game/:playerId',
+      element: <PageWrapper>game page</PageWrapper>,
+    },
     // {
     //   path: '/games',
     //   element: <PageWrapper><Games /></PageWrapper>,
