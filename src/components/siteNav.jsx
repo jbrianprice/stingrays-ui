@@ -1,6 +1,6 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Menu, X } from "lucide-react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 // import logo from "../assets/logo.png"
 import logo from "../assets/logo2.svg"
 import logoDark from "../assets/logo-on-dark.svg"
@@ -8,6 +8,11 @@ import logoDark from "../assets/logo-on-dark.svg"
 export default function SiteNav() {
     const [isOpen, setIsOpen] = useState(false)
     const navigate = useNavigate()
+    const location = useLocation()
+
+    useEffect(()=> {
+        setIsOpen(false)
+    },[location])
 
     return (
         <nav className="relative text-white p-4 w-full dark:bg-cyan-950 bg-cyan-50 backdrop-invert backdrop-opacity-10">

@@ -12,6 +12,8 @@ import PlayerGameRow from "./playerGameRow"
 const PlayerStopWath = ({ player, statType, minValue = 2.5, maxValue = 5.5 }) => {
     const [lastRecord, setLastRecord] = useState()
     const [pr, setPR] = useState()
+    const [prs, setPRS] = useState()
+    const [allPR, setAllPR] = useState()
     const [timeError, setTimeError] = useState()
     const [celebrate, isCelebrate] = useState()
 
@@ -49,18 +51,42 @@ const PlayerStopWath = ({ player, statType, minValue = 2.5, maxValue = 5.5 }) =>
             where("statValue", ">", minValue * 1000), // convert seconds to milliseconds
             where("statValue", "<", maxValue * 1000), // convert seconds to milliseconds
             orderBy("statValue", "asc"),
-            limit(1)
+            limit(3)
         )
 
         const unsubscribeLowest = onSnapshot(PRQuery, (snapshot) => {
             if (!snapshot.empty) {
                 setPR({ id: snapshot.docs[0].id, ...snapshot.docs[0].data() })
+                setPRS(
+                    snapshot.docs.map(s => {
+                        return {
+                            ...s.data(),
+                            id: s.id, 
+                        }
+                    })
+                )
+            }
+        })
+        
+        const AllPRQuery = query(
+            statRef,
+            where("statType", "==", statType),
+            where("statValue", ">", minValue * 1000), // convert seconds to milliseconds
+            where("statValue", "<", maxValue * 1000), // convert seconds to milliseconds
+            orderBy("statValue", "asc"),
+            limit(3)
+        )
+
+        const unsubscribeTeamBest = onSnapshot(AllPRQuery, (snapshot) => {
+            if (!snapshot.empty) {
+                setAllPR({ id: snapshot.docs[0].id, ...snapshot.docs[0].data() })
             }
         })
 
         return () => {
             unsubscribeLast()
             unsubscribeLowest()
+            unsubscribeTeamBest()
         }
     }, [])
 
@@ -95,12 +121,10 @@ const PlayerStopWath = ({ player, statType, minValue = 2.5, maxValue = 5.5 }) =>
     return (
         <PlayerGameRow
             player={player}
-            prLabel={"Best time"}
+            allPRValue={player.id === allPR?.playerId ? formatTime(allPR?.statValue) : null}
             prValue={pr ? formatTime(pr?.statValue) : null}
-            lastLabel="Last time"
             lastRecordValue={pr ? formatTime(lastRecord?.statValue) : null}
             error={timeError}
-            errorMessage="That number looks fishy. Try again."
             celebrate={celebrate}
         >
             <Stopwatch getTime={handleAddStat} getReset={handleResetTimer} />

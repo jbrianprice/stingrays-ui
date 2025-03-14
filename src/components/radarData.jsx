@@ -4,16 +4,7 @@ import { collection, query, where, orderBy, limit, onSnapshot, addDoc } from "fi
 import { useEffect, useState } from "react"
 import useLocation from "../utils/useLocation"
 // import useWeather from "../utils/useWeather"
-import {
-    History,
-    Trophy,
-    Plus,
-    Minus,
-    CircleChevronUp,
-    CircleChevronDown,
-    ChevronDown,
-    ChevronUp,
-} from "lucide-react"
+import { ChevronDown, ChevronUp } from "lucide-react"
 import { formatTime } from "./stopWatch"
 import { useNavigate } from "react-router-dom"
 import PlayerGameRow from "./playerGameRow"
@@ -21,6 +12,8 @@ import PlayerGameRow from "./playerGameRow"
 const RadarData = ({ player, statType, minValue, maxValue }) => {
     const [lastRecord, setLastRecord] = useState()
     const [pr, setPR] = useState()
+    const [prs, setPRS] = useState()
+    const [allPR, setAllPR] = useState()
     const [timeError, setTimeError] = useState()
     const [celebrate, isCelebrate] = useState()
 
@@ -60,18 +53,42 @@ const RadarData = ({ player, statType, minValue, maxValue }) => {
             where("statValue", ">", minValue),
             where("statValue", "<", maxValue),
             orderBy("statValue", "desc"),
-            limit(1)
+            limit(3)
         )
 
         const unsubscribeLowest = onSnapshot(PRQuery, (snapshot) => {
             if (!snapshot.empty) {
                 setPR({ id: snapshot.docs[0].id, ...snapshot.docs[0].data() })
+                setPRS(
+                    snapshot.docs.map((s) => {
+                        return {
+                            ...s.data(),
+                            id: s.id,
+                        }
+                    })
+                )
+            }
+        })
+
+        const AllPRQuery = query(
+            statRef,
+            where("statType", "==", statType),
+            where("statValue", ">", minValue),
+            where("statValue", "<", maxValue),
+            orderBy("statValue", "desc"),
+            limit(3)
+        )
+
+        const unsubscribeTeamBest = onSnapshot(AllPRQuery, (snapshot) => {
+            if (!snapshot.empty) {
+                setAllPR({ id: snapshot.docs[0].id, ...snapshot.docs[0].data() })
             }
         })
 
         return () => {
             unsubscribeLast()
             unsubscribeLowest()
+            unsubscribeTeamBest()
         }
     }, [])
 
@@ -106,12 +123,10 @@ const RadarData = ({ player, statType, minValue, maxValue }) => {
     return (
         <PlayerGameRow
             player={player}
-            prLabel={"Highest speed"}
-            prValue={pr ? pr?.statValue : null}
-            lastLabel="Last speed"
-            lastRecordValue={pr ? lastRecord?.statValue : null}
+            allPRValue={player.id === allPR?.playerId ? `${allPR?.statValue}mph` : null}
+            prValue={pr ? `${pr?.statValue}mph` : null}
+            lastRecordValue={pr ? `${lastRecord?.statValue}mph` : null}
             error={timeError}
-            errorMessage="That number looks fishy. Try again."
             celebrate={celebrate}
         >
             <div className="flex gap-3 items-center">
@@ -140,7 +155,9 @@ const RadarData = ({ player, statType, minValue, maxValue }) => {
                         <ChevronDown className="h-7 md:h-4" />
                     </button>
                 </div>
-                <button onClick={()=> handleAddStat(speed)} className="ml-auto">Save</button>
+                <button onClick={() => handleAddStat(speed)} className="ml-auto">
+                    Save
+                </button>
             </div>
         </PlayerGameRow>
     )

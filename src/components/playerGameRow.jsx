@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom"
-import { Trophy, History } from "lucide-react"
+import { Trophy, History, Medal, Crown } from "lucide-react"
 
 const PlayerGameRow = ({
     player,
-    prLabel = "Best",
+    allPRLabel = "Team leader",
+    allPRValue,
+    prLabel = "Personal best",
     prValue,
-    lastLabel = "Last",
+    lastLabel = "Last try",
     lastRecordValue,
     error,
     errorMessage = "That number looks fishy. Try again.",
@@ -31,14 +33,20 @@ const PlayerGameRow = ({
                         <span className="text-xs text-slate-500">{player.team.teamName}</span>
                     </div>
                 </div>
-                <div className="flex flex-col items-center text-sm text-slate-500 font-extrabold">
-                    {prValue && (
+                <div className="flex flex-col items-end text-sm text-slate-500 font-extrabold">
+                    {(allPRValue || prValue) && (
                         <p className={`flex items-center gap-1`}>
                             <span className="flex whitespace-nowrap items-center gap-2">
-                                <span className="font-normal hidden md:block">{prLabel}</span>
-                                <Trophy size="1rem" className="flex-none" />
+                                <span className="font-normal hidden md:block">
+                                    {allPRValue ? allPRLabel : prLabel}
+                                </span>
+                                {allPRValue ? (
+                                    <Crown size="1rem" className="flex-none text-amber-400" />
+                                ) : (
+                                    <Medal size="1rem" className="flex-none text-amber-400" />
+                                )}
                             </span>
-                            {prValue}
+                            {allPRValue ?? prValue}
                         </p>
                     )}
                     {lastRecordValue && (

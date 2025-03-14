@@ -49,7 +49,7 @@ export const gamesMeta = [
         name: "Frickin' laser beams",
         description: "How hard can you pitch",
         img: <PitchSvg className="h-11 max-w-11" />,
-        app: <RadarGun />,
+        app: <RadarGun statType="pichSpeed" minValue={25} maxValue={65}/>,
     },
     {
         statType: "pitchAccuracy",

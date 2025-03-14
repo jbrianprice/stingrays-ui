@@ -26,7 +26,20 @@ export const useRoster = ()=> {
                             ...doc.data(),
                         }))
                     )
-                    setRoster(rosterList)
+
+                    const sortRosterByName = rosterList.sort((a, b) => {
+                        const nameA = a.firstName.toUpperCase();
+                        const nameB = b.firstName.toUpperCase();
+                        if (nameA < nameB) {
+                          return -1;
+                        }
+                        if (nameA > nameB) {
+                          return 1;
+                        }
+                        return 0;
+                      });
+
+                    setRoster(sortRosterByName)
                     setLoading(false)
                 } catch (err) {
                     console.error("Failed to fetch players:", err)
