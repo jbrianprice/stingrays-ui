@@ -4,15 +4,13 @@ import { collection, getDocs, onSnapshot, addDoc } from "firebase/firestore"
 import AddPlayer from "../components/addPlayer"
 import Modal from "../components/modal"
 import { useNavigate } from "react-router-dom"
+import Loader from "../components/loader"
+import { useRoster } from "../utils/useRoster"
 
 function Roster() {
     const navigate = useNavigate();
-    const [data, setData] = useState([])
-    const [roster, setRoster] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
+    const {roster, loading, error} = useRoster()
     const [addFlow, showAddFlow] = useState(false)
-
 
     const collectionName = "roster"
 
@@ -49,32 +47,6 @@ function Roster() {
         return () => unsubscribe()
     }, [])
 
-    // useEffect(() => {
-    //     const rosterRef = collection(firestoreDB, collectionName)
-    //     const unsubscribe = onSnapshot(rosterRef, (snapshot) => {
-    //         const data = snapshot.docs.map((doc) => doc.data())
-    //         setRoster(data)
-    //     })
-
-    //     return () => unsubscribe()
-    // }, [])
-
-    // useEffect(() => {
-    //   const fetchData = async () => {
-    //     try {
-    //       const querySnapshot = await getDocs(collection(firestoreDB, collectionName));
-    //       const newData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    //       setData(newData);
-    //     } catch (e) {
-    //       setError(e);
-    //     } finally {
-    //       setLoading(false);
-    //     }
-    //   };
-
-    //   fetchData();
-    // }, []);
-
     const handleAddPlayer = async (formData) => {
         const now = new Date()
         await addDoc(collection(firestoreDB, collectionName), {
@@ -86,7 +58,7 @@ function Roster() {
     }
 
     if (loading) {
-        return <p>Loading roster...</p>
+        return  <Loader message="...loading players" />
     }
 
     if (error) {

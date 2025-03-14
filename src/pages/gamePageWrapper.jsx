@@ -11,7 +11,7 @@ const GamePage = () => {
         <div>
             <BreadCrumb label = "All games" path="/" />
             <div className="flex gap-3  text-cyan-700 dark:text-cyan-400 pt-10 pb-6 border-b border-neutral-200 dark:border-neutral-800">
-                <div className=" scale-200">{game.img} </div>
+                <div className="scale-200">{game.img} </div>
                 <div>
                     <h1 className="flex items-baseline gap-2">
                         {game.name}

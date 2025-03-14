@@ -4,16 +4,27 @@ import { collection, query, where, orderBy, limit, onSnapshot, addDoc } from "fi
 import { useEffect, useState } from "react"
 import useLocation from "../utils/useLocation"
 // import useWeather from "../utils/useWeather"
-import { History, Trophy } from "lucide-react"
+import {
+    History,
+    Trophy,
+    Plus,
+    Minus,
+    CircleChevronUp,
+    CircleChevronDown,
+    ChevronDown,
+    ChevronUp,
+} from "lucide-react"
 import { formatTime } from "./stopWatch"
 import { useNavigate } from "react-router-dom"
 import PlayerGameRow from "./playerGameRow"
 
-const PlayerStopWath = ({ player, statType, minValue = 2.5, maxValue = 5.5 }) => {
+const RadarData = ({ player, statType, minValue, maxValue }) => {
     const [lastRecord, setLastRecord] = useState()
     const [pr, setPR] = useState()
     const [timeError, setTimeError] = useState()
     const [celebrate, isCelebrate] = useState()
+
+    const [speed, setSpeed] = useState(40)
 
     const navigate = useNavigate()
 
@@ -30,8 +41,8 @@ const PlayerStopWath = ({ player, statType, minValue = 2.5, maxValue = 5.5 }) =>
             statRef,
             where("playerId", "==", player.id),
             where("statType", "==", statType),
-            where("statValue", ">", minValue * 1000), // convert seconds to milliseconds
-            where("statValue", "<", maxValue * 1000), // convert seconds to milliseconds
+            where("statValue", ">", minValue),
+            where("statValue", "<", maxValue),
             orderBy("dateAdded", "desc"),
             limit(1)
         )
@@ -46,9 +57,9 @@ const PlayerStopWath = ({ player, statType, minValue = 2.5, maxValue = 5.5 }) =>
             statRef,
             where("playerId", "==", player.id),
             where("statType", "==", statType),
-            where("statValue", ">", minValue * 1000), // convert seconds to milliseconds
-            where("statValue", "<", maxValue * 1000), // convert seconds to milliseconds
-            orderBy("statValue", "asc"),
+            where("statValue", ">", minValue),
+            where("statValue", "<", maxValue),
+            orderBy("statValue", "desc"),
             limit(1)
         )
 
@@ -65,7 +76,7 @@ const PlayerStopWath = ({ player, statType, minValue = 2.5, maxValue = 5.5 }) =>
     }, [])
 
     const handleAddStat = async (value) => {
-        if (value < maxValue * 1000 && value > minValue * 1000) {
+        if (value < maxValue && value > minValue) {
             setTimeError(false)
             await addDoc(collection(firestoreDB, collectionName), {
                 playerId: player.id,
@@ -78,7 +89,7 @@ const PlayerStopWath = ({ player, statType, minValue = 2.5, maxValue = 5.5 }) =>
                 },
                 // weather:
             })
-            if (value <= pr?.statValue) isCelebrate(true)
+            if (value >= pr?.statValue) isCelebrate(true)
         } else setTimeError(true)
     }
 
@@ -88,24 +99,50 @@ const PlayerStopWath = ({ player, statType, minValue = 2.5, maxValue = 5.5 }) =>
         }, 250)
     }, [celebrate])
 
-    const handleResetTimer = () => {
-        setTimeError(false)
+    const handleIncrement = (value) => {
+        if (speed + value <= maxValue && speed + value >= minValue) setSpeed(speed + value)
     }
 
     return (
         <PlayerGameRow
             player={player}
-            prLabel={"Best time"}
-            prValue={pr ? formatTime(pr?.statValue) : null}
-            lastLabel="Last time"
-            lastRecordValue={pr ? formatTime(lastRecord?.statValue) : null}
+            prLabel={"Highest speed"}
+            prValue={pr ? pr?.statValue : null}
+            lastLabel="Last speed"
+            lastRecordValue={pr ? lastRecord?.statValue : null}
             error={timeError}
             errorMessage="That number looks fishy. Try again."
             celebrate={celebrate}
         >
-            <Stopwatch getTime={handleAddStat} getReset={handleResetTimer} />
+            <div className="flex gap-3 items-center">
+                <div className="flex flex-col">
+                    <button className="tertiary" onClick={() => handleIncrement(10)}>
+                        <ChevronUp className="h-7 md:h-4" />
+                    </button>
+                    <button className="tertiary" onClick={() => handleIncrement(-10)}>
+                        <ChevronDown className="h-7 md:h-4" />
+                    </button>
+                </div>
+                <div className="flex">
+                    <span className="border border-stone-200 dark:border-stone-800 p-4 rounded-md text-4xl font-mono">
+                        {speed.toString().slice(0, 1)}
+                    </span>
+                    <span className="border border-stone-200 dark:border-stone-800 p-4 rounded-md text-4xl font-mono">
+                        {speed.toString().slice(1)}
+                    </span>
+                </div>
+                <div className="flex flex-col">
+                    <button className="tertiary" onClick={() => handleIncrement(1)}>
+                        <ChevronUp className="h-7 md:h-4" />
+                    </button>
+                    <button className="tertiary" onClick={() => handleIncrement(-1)}>
+                        <ChevronDown className="h-7 md:h-4" />
+                    </button>
+                </div>
+                <button onClick={()=> handleAddStat(speed)} className="ml-auto">Save</button>
+            </div>
         </PlayerGameRow>
     )
 }
 
-export default PlayerStopWath
+export default RadarData

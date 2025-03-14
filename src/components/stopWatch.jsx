@@ -41,7 +41,7 @@ export default function Stopwatch({
             <div
                 className={`${
                     time === 0
-                        ? " text-neutral-300 dark:text-neutral-800"
+                        ? " text-neutral-300 dark:text-slate-500"
                         : " text-neutral-600 dark:text-neutral-400"
                 } text-3xl font-mono p-2 `}
             >

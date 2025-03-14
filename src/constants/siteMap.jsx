@@ -1,4 +1,3 @@
-import Home from "../pages/home";
 import Roster from "../pages/roster";
 import Games from "../pages/games";
 import GamePageWrapper from "../pages/gamePageWrapper";

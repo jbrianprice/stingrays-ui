@@ -15,55 +15,54 @@ import RadarGun from "../components/radarGun"
 import BallsAndStrikes from "../components/ballsAndStrikes"
 import FieldingAccuracy from "../components/fieldingAccuracy"
 
-
 export const gamesMeta = [
     {
         statType: "homeToFirstTime",
         name: "18.3 meter dash",
         description: "Go from home to first as fast as you can",
         img: <RunSvg className="h-11 max-w-11" />,
-        app: <RosterStopWatch statType="homeToFirstTime" />
+        app: <RosterStopWatch statType="homeToFirstTime" minValue={2.5} maxValue={5.5} />,
     },
     {
         statType: "homeToSecondTime",
         name: "Singles are boring",
         description: "Go from home to second as fast as you can",
         img: <HitSvg className="h-11 max-w-11" />,
-        app: <RosterStopWatch statType="homeToSecondTime"/>
+        app: <RosterStopWatch statType="homeToSecondTime" minValue={4.5} maxValue={9.5} />,
     },
     {
         statType: "stealingTime",
         name: "It's not stealing if you own it",
         description: "Get a good jump and steal a base",
         img: <StealSvg className="h-11 max-w-11" />,
-        app: <RosterStopWatch statType="stealingTime"/>
+        app: <RosterStopWatch statType="stealingTime" minValue={2.5} maxValue={5.5} />,
     },
     {
         statType: "throwSpeed",
         name: "I can throw a ball over a mountain",
         description: "Throw the ball as fast as you can",
         img: <ThrowSvg className="h-11 max-w-11" />,
-        app: <RadarGun />
+        app: <RadarGun statType="throwSpeed" minValue={25} maxValue={75}/>,
     },
     {
         statType: "pichSpeed",
         name: "Frickin' laser beams",
         description: "How hard can you pitch",
         img: <PitchSvg className="h-11 max-w-11" />,
-        app: <RadarGun />
+        app: <RadarGun />,
     },
     {
         statType: "pitchAccuracy",
         name: "Juuuuust a bit inside",
         description: "Test your pitching accuracy",
         img: <CatchSvg className="h-11 max-w-11" />,
-        app: <BallsAndStrikes />
+        app: <BallsAndStrikes />,
     },
     {
         statType: "starDrillDefenseProficiency",
         name: "Star drill",
         description: "Make as many outs as you can before the runner scores.",
         img: <FieldSVG className="h-11 max-w-11" />,
-        app: <FieldingAccuracy />
+        app: <FieldingAccuracy />,
     },
 ]

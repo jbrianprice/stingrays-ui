@@ -1,34 +1,41 @@
-import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react"
+import { Menu, X } from "lucide-react"
+import { Link, useNavigate } from "react-router-dom"
+import logo from "../assets/logo.png"
 
 export default function SiteNav() {
-  const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false)
+    const navigate = useNavigate()
 
-  return (
-    <nav className=" text-white p-4 w-full">
-      <div className="container mx-auto flex justify-between">
-        
-         {/* Menu Items */}
-         <div
-          className={`lg:flex lg:items-center lg:space-x-6 w-full lg:w-auto flex flex-col lg:flex-row space-y-4 lg:space-y-0 ${
-            isOpen ? 'block' : 'hidden'
-          }`}
-        >
-          <Link to={'/'}>Play</Link>
-          {/* <Link to={'/games'}>Games</Link> */}
-          <Link to={'/roster'}>Roster</Link>
-        </div>
+    return (
+        <nav className="relative text-white p-4 w-full dark:bg-cyan-950 bg-cyan-50 backdrop-invert backdrop-opacity-10">
+            <div className="container mx-auto flex items-center justify-between md:justify-normal">
+                <button className="contents" onClick={() => navigate("/")}>
+                    <img className="max-w-2/3 max-h-12 bg " src={logo} />
+                </button>
+                {/* Menu Items */}
+                <div
+                    className={`
+                    absolute top-0 left-0 z-100 p-4 md:static bg-cyan-950 md:bg-transparent
+                    lg:flex lg:items-center lg:space-x-6 w-full lg:w-auto flex flex-col lg:flex-row space-y-4 lg:space-y-0 uppercase font-bold 
+                    ${isOpen ? "block" : "hidden"}`}
+                >
+                    <Link className="py-2 px-4 rounded-md hover:bg-cyan-200" to={"/"}>
+                        Games
+                    </Link>
+                    {/* <Link to={'/games'}>Games</Link> */}
+                    <Link className="py-2 px-4 rounded-md hover:bg-cyan-200" to={"/roster"}>
+                        Roster
+                    </Link>
+                </div>
 
-        {/* Hamburger Icon */}
-        <div className="lg:hidden ml-auto">
-          <button onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <X size={28} /> : <Menu size={28} />}
-          </button>
-        </div>
-
-       
-      </div>
-    </nav>
-  );
+                {/* Hamburger Icon */}
+                <div className="lg:hidden ml-auto relative z-100">
+                    <button onClick={() => setIsOpen(!isOpen)}>
+                        {isOpen ? <X size={28} /> : <Menu size={28} />}
+                    </button>
+                </div>
+            </div>
+        </nav>
+    )
 }

@@ -30,7 +30,7 @@ a {
   @apply text-cyan-700 no-underline
 }
 a:hover {
-  @apply text-cyan-950 dark:text-cyan-400
+  @apply text-cyan-800 dark:text-cyan-400
 }
 
 body {
