@@ -123,7 +123,8 @@ const RadarData = ({ player, statType, minValue, maxValue }) => {
                         <ChevronDown className="h-7 md:h-4" />
                     </button>
                 </div>
-                <div className="flex">
+                <div className="relative">
+                    <div className="absolute top-1/2  w-full h-px bg-stone-200 dark:bg-stone-800" />
                     <span className="border border-stone-200 dark:border-stone-800 p-4 rounded-md text-4xl font-mono">
                         {speed.toString().slice(0, 1)}
                     </span>
