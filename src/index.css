@@ -97,9 +97,23 @@ input:focus, select:focus {
 }
 
 
+input.error,
+input.invalid,
 input:required:invalid, 
 select:required:invalid {
   @apply border-red-800
+}
+
+select:required:invalid {
+  color: gray;
+}
+option[disabled] {
+  display: none;
+}
+
+*::placeholder,
+option[value=''][disabled] {
+  @apply text-neutral-500
 }
 
 .badge {

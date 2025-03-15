@@ -1,23 +1,13 @@
 import React, { useEffect } from "react"
 import { useState } from "react"
-import { getDocs, collection } from "firebase/firestore"
+import { doc, setDoc } from "firebase/firestore"
 import { firestoreDB } from "../firebaseConfig"
-import Select from "react-select"
-
-const fieldPositions = [
-    "Pitcher",
-    "Catcher",
-    "First Base",
-    "Second Base",
-    "Third Base",
-    "Shortstop",
-    "Left Field",
-    "Center Field",
-    "Right Field",
-    "Utility",
-]
+import { push, ref, getDatabase } from "firebase/database"
+import { useTeams } from "../utils/useTeams"
+import { fieldPositions } from "../constants/positions"
 
 export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = [] }) {
+    const { teams, teamsLoading, teamsError } = useTeams()
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -29,38 +19,14 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
         dateModified: new Date(),
         team: undefined,
     })
-
-    const [roster, setRoster] = useState([])
-    const [teams, setTeams] = useState([])
-    const [teamsLoading, setTeamsLoading] = useState(true)
-    const [teamsError, setTeamsError] = useState()
-    const [submitted, isSubmitted] = useState()
     const [duplicate, isDuplicate] = useState(false)
+    const [duplicateTeam, isDuplicateTeam] = useState(false)
     const [selectedPositions, setSelectedPositions] = useState([])
+    const [addTeam, showAddTeam] = useState(false)
+    const [required, showRequired] = useState(true)
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const getTeams = await getDocs(collection(firestoreDB, "teams"))
-                const teamList = getTeams.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-                setTeams(teamList)
-                if (!formData.team)
-                    setFormData((prev) => ({
-                        ...prev,
-                        team: teamList[0],
-                    }))
-            } catch (e) {
-                console.error(e)
-                setTeamsError(e)
-            } finally {
-                setTeamsLoading(false)
-            }
-        }
-        fetchData()
-    }, [])
-
-    useEffect(()=> {
-        setFormData({...formData, positions: selectedPositions})
+        setFormData({ ...formData, positions: selectedPositions })
     }, [selectedPositions])
 
     const handleCheckboxChange = (position) => {
@@ -69,21 +35,53 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
         )
     }
 
-    console.log(formData)
-
     const handleChange = (e) => {
-        const { name, value, checked } = e.target
+        const { name, value, checked, type } = e.target
 
         const getValue = () => {
-            if (e.target.type === "number") return Number(value)
-            if (e.target.type === "checkbox") return checked
+            if (type === "number") return Number(value)
+            if (type === "checkbox") return checked
+            if (name === "team" && value === "add-team") {
+                showAddTeam(true)
+                return null
+            }
+            if (name === "team" && value && value !== "add-team") {
+                showAddTeam(false)
+                return JSON.parse(value)
+            }
+            if (name === "newTeam") {
+                const generatePushId = () => {
+                    const db = getDatabase()
+                    const newPostRef = push(ref(db, "teams"))
+                    return newPostRef.key
+                }
+                const pushId = generatePushId()
+                return {
+                    id: pushId,
+                    teamName: value,
+                }
+            }
             return value
+        }
+
+        const getPropertyName = () => {
+            if (name === "newTeam") return "team"
+            return name
         }
 
         setFormData((prev) => ({
             ...prev,
-            [name]: getValue(),
+            [getPropertyName()]: getValue(),
         }))
+    }
+
+    const handleAddTeam = async () => {
+        const collectionName = "teams"
+        const { id, teamName } = formData.team
+        const docRef = doc(firestoreDB, collectionName, id)
+        await setDoc(docRef, {
+            teamName: teamName,
+        })
     }
 
     const handleValidateSubmit = (e) => {
@@ -96,10 +94,25 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
         )
 
         if (doesPlayerExist) isDuplicate(true)
+        if (!duplicateTeam) {
+            // isDuplicate(false)
+            // isDuplicateTeam(false)
+            // handleSubmit(formData)
+            // handleCancel()
+            handleAddTeam()
+        }
+    }
+
+    const handleValidateAddTeam = (e) => {
+        e.preventDefault()
+
+        const doesTeamExist = teams.some(
+            (item) => formData?.team?.teamName?.toLowerCase() === item?.teamName?.toLowerCase()
+        )
+
+        if (doesTeamExist && addTeam) isDuplicateTeam(true)
         else {
-            isDuplicate(false)
-            handleSubmit(formData)
-            handleCancel()
+            isDuplicateTeam(false)
         }
     }
 
@@ -110,7 +123,7 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
                     <div className="input-wrapper">
                         <label>First name</label>
                         <input
-                            required
+                            required={required}
                             type="text"
                             name="firstName"
                             value={formData.firstName}
@@ -120,7 +133,7 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
                     <div className="input-wrapper">
                         <label>Last name</label>
                         <input
-                            required
+                            required={required}
                             type="text"
                             name="lastName"
                             value={formData.lastName}
@@ -132,7 +145,7 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
                     <div className="input-wrapper">
                         <label>Jersey #</label>
                         <input
-                            required
+                            required={required}
                             type="number"
                             name="number"
                             max="99"
@@ -180,19 +193,46 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
                             "...loading teams"
                         ) : (
                             <select
+                                required
                                 className="border p-2 block w-full mb-2"
                                 name="team"
                                 onChange={(e) => handleChange(e)}
                                 onBlur={(e) => handleChange(e)}
+                                defaultValue={""}
                             >
-                                {teams.map((t) => (
+                                <option value="" disabled selected>
+                                    Select an option...
+                                </option>
+                                {teams?.map((t) => (
                                     <option key={t.teamName} value={JSON.stringify(t)}>
                                         {t.teamName}
                                     </option>
                                 ))}
+                                <option key={"add-team"} value={"add-team"}>
+                                    -- add new team --
+                                </option>
                             </select>
                         )}
                     </div>
+                    {addTeam && (
+                        <div>
+                            <label>Team name</label>
+                            <input
+                                required={required}
+                                type="text"
+                                name="newTeam"
+                                defaultValue=""
+                                onChange={handleChange}
+                                onBlur={handleValidateAddTeam}
+                                className={`border p-2 block w-full mb-2 ${
+                                    duplicateTeam ? "invalid" : ""
+                                }`}
+                            />
+                            {duplicateTeam && (
+                                <p className="error-message">That team may already exist</p>
+                            )}
+                        </div>
+                    )}
                     <div className="flex items-center mb-2">
                         <label className="flex items-center gap-2">
                             <input
