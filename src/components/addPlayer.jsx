@@ -95,11 +95,11 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
 
         if (doesPlayerExist) isDuplicate(true)
         if (!duplicateTeam) {
-            // isDuplicate(false)
-            // isDuplicateTeam(false)
-            // handleSubmit(formData)
-            // handleCancel()
             handleAddTeam()
+            isDuplicate(false)
+            isDuplicateTeam(false)
+            handleSubmit(formData)
+            handleCancel()
         }
     }
 
