@@ -56,5 +56,14 @@ export const useRoster = ()=> {
         return () => unsubscribe()
     }, [])
 
-    return {roster, loading, error}
+    const groupedByTeam = roster.reduce((acc, player) => {
+        const teamName = player.team?.teamName || "No Team"
+        if (!acc[teamName]) {
+            acc[teamName] = []
+        }
+        acc[teamName].push(player)
+        return acc
+    }, {})
+
+    return {roster, loading, error, groupedByTeam}
 }

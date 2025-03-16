@@ -1,10 +1,13 @@
 import { routes } from "./constants/siteMap"
 import { RouterProvider } from "react-router-dom"
+import { TeamProvider } from "./utils/useTeamContext"
 
 function App() {
     return (
         <>
-            <RouterProvider router={routes}></RouterProvider>
+            <TeamProvider>
+                <RouterProvider router={routes}></RouterProvider>
+            </TeamProvider>
         </>
     )
 }

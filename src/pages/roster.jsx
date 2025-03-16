@@ -6,6 +6,7 @@ import Modal from "../components/modal"
 import { useNavigate } from "react-router-dom"
 import Loader from "../components/loader"
 import { useRoster } from "../utils/useRoster"
+import { Plus } from "lucide-react"
 
 function Roster() {
     const navigate = useNavigate()
@@ -77,8 +78,8 @@ function Roster() {
                     </li>
                 ))}
             </ul>
-            <button onClick={() => showAddFlow(true)} className="tertiary text-sm">
-                + Add a new player
+            <button onClick={() => showAddFlow(true)} className="tertiary text-sm flex items-center mx-auto">
+                <Plus className="h-4" />Add a new player
             </button>
             {addFlow && (
                 <Modal title="Add player" isOpen={addFlow} handleClose={() => showAddFlow(false)}>
