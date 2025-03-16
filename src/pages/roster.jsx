@@ -34,9 +34,6 @@ function Roster() {
         return acc
     }, {})
 
-    // console.log(Object.entries(groupedByTeam))
-    console.log(groupedByTeam)
-
     if (loading) {
         return <Loader message="...loading players" />
     }
