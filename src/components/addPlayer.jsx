@@ -11,9 +11,9 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
-        birthday: undefined,
+        birthday: "",
         number: undefined,
-        position: [],
+        positions: [],
         activeStatus: true,
         dateAdded: new Date(),
         dateModified: new Date(),
@@ -90,7 +90,8 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
         const doesPlayerExist = currentRoster.some(
             (item) =>
                 (formData.firstName?.toLowerCase() === item.firstName?.toLowerCase()) &
-                (formData.lastName?.toLowerCase() === item.lastName?.toLowerCase())
+                (formData.lastName?.toLowerCase() === item.lastName?.toLowerCase()) &
+                (formData.birthday === item.birthday)
         )
 
         if (doesPlayerExist) isDuplicate(true)
@@ -115,6 +116,8 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
             isDuplicateTeam(false)
         }
     }
+
+    console.log(formData)
 
     return (
         <div className="p-4 flex flex-col gap-4">
