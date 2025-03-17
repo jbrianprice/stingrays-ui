@@ -5,8 +5,16 @@ import { firestoreDB } from "../firebaseConfig"
 import { push, ref, getDatabase } from "firebase/database"
 import { useTeams } from "../utils/useTeams"
 import { fieldPositions } from "../constants/positions"
+import Modal from "./modal"
 
-export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = [] }) {
+export default function AddPlayer({
+    handleSubmit,
+    handleUpdatePlayer,
+    handleCancel,
+    handleDeletePlayer,
+    currentRoster = [],
+    playerData = {},
+}) {
     const { teams, teamsLoading, teamsError } = useTeams()
     const [formData, setFormData] = useState({
         firstName: "",
@@ -18,12 +26,16 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
         dateAdded: new Date(),
         dateModified: new Date(),
         team: undefined,
+        ...playerData,
     })
     const [duplicate, isDuplicate] = useState(false)
     const [duplicateTeam, isDuplicateTeam] = useState(false)
-    const [selectedPositions, setSelectedPositions] = useState([])
+    const [selectedPositions, setSelectedPositions] = useState(playerData?.positions ?? [])
     const [addTeam, showAddTeam] = useState(false)
     const [required, showRequired] = useState(true)
+    const [deleteModal, showDeleteModal] = useState(false)
+
+    console.log(playerData.firstName)
 
     useEffect(() => {
         setFormData({ ...formData, positions: selectedPositions })
@@ -104,6 +116,18 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
         }
     }
 
+    const handleValidateUpdate = (e) => {
+        e.preventDefault()
+
+        if (!duplicateTeam) {
+            handleAddTeam()
+            isDuplicate(false)
+            isDuplicateTeam(false)
+            handleUpdatePlayer(formData)
+            handleCancel()
+        }
+    }
+
     const handleValidateAddTeam = (e) => {
         e.preventDefault()
 
@@ -117,11 +141,18 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
         }
     }
 
-    console.log(formData)
+    const handleDelete = ()=> {
+        showDeleteModal(false)
+        handleCancel()
+        handleDeletePlayer(playerData.id)
+    }
 
     return (
         <div className="p-4 flex flex-col gap-4">
-            <form onSubmit={(e) => handleValidateSubmit(e)} className="mt-4">
+            <form
+                onSubmit={(e) => (playerData?.firstName ? handleValidateUpdate(e) : handleValidateSubmit(e))}
+                className="mt-4"
+            >
                 <div className="flex flex-col md:flex-row gap-3">
                     <div className="input-wrapper">
                         <label>First name</label>
@@ -181,7 +212,7 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
                                 <input
                                     type="checkbox"
                                     value={pos}
-                                    checked={selectedPositions.includes(pos)}
+                                    checked={selectedPositions?.includes(pos)}
                                     onChange={() => handleCheckboxChange(pos)}
                                 />
                                 <span>{pos}</span>
@@ -201,7 +232,7 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
                                 name="team"
                                 onChange={(e) => handleChange(e)}
                                 onBlur={(e) => handleChange(e)}
-                                defaultValue={""}
+                                value={JSON.stringify(formData.team)}
                             >
                                 <option value="" disabled selected>
                                     Select an option...
@@ -241,9 +272,10 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
                             <input
                                 type="checkbox"
                                 name="activeStatus"
-                                defaultChecked={formData.activeStatus}
+                                defaultChecked={formData?.activeStatus}
                                 onChange={handleChange}
                                 className="mr-2"
+                                defaultValue={playerData?.activeStatus}
                             />
                             Active player
                         </label>
@@ -256,11 +288,36 @@ export default function AddPlayer({ handleSubmit, handleCancel, currentRoster = 
                         </button>
                     )}
                     <button type="submit" className="w-full">
-                        Add
+                        {playerData ? "Save" : "Add"}
                     </button>
                 </div>
                 {duplicate && <p className="error-message">That player may already exist</p>}
             </form>
+            {playerData.firstName && (
+                <>
+                    <button
+                        onClick={() => showDeleteModal(true)}
+                        className="tertiary text-red-500! mx-auto"
+                    >
+                        Delete player
+                    </button>
+                    <Modal
+                        isOpen={deleteModal}
+                        handleClose={() => showDeleteModal(false)}
+                        title={`Are you sure you want to delete ${playerData?.firstName}?`}
+                    >
+                        <div className="flex items-center gap-4">
+                            <button className="secondary" onClick={()=> showDeleteModal(false)}>
+                                Nevermind
+                            </button>
+                            <button onClick={()=> handleDelete()}>
+                                I'm sure
+                            </button>
+                        </div>
+                        
+                    </Modal>
+                </>
+            )}
         </div>
     )
 }
