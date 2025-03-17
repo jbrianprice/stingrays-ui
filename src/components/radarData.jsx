@@ -8,14 +8,17 @@ import { ChevronDown, ChevronUp } from "lucide-react"
 import { formatTime } from "./stopWatch"
 import { useNavigate } from "react-router-dom"
 import PlayerGameRow from "./playerGameRow"
+import { useTeamContext } from "../utils/useTeamContext"
 
 const RadarData = ({ player, statType, minValue, maxValue }) => {
     const [lastRecord, setLastRecord] = useState()
     const [pr, setPR] = useState()
     const [prs, setPRS] = useState()
-    const [allPR, setAllPR] = useState()
+    const [bestActive, setBestActive] = useState()
+    const [bestOverall, setBestOverall] = useState()
     const [timeError, setTimeError] = useState()
     const [celebrate, isCelebrate] = useState()
+    const { selectedTeams } = useTeamContext()
 
     const [speed, setSpeed] = useState(40)
 
@@ -24,12 +27,11 @@ const RadarData = ({ player, statType, minValue, maxValue }) => {
     const userCords = useLocation()
     // const weather = useWeather()
 
+    // Reference to the Firestore collection
     const collectionName = "stats"
+    const statRef = collection(firestoreDB, collectionName)
 
     useEffect(() => {
-        // Reference to the Firestore collection
-        const statRef = collection(firestoreDB, collectionName)
-
         const lastRecordQuery = query(
             statRef,
             where("playerId", "==", player.id),
@@ -70,7 +72,7 @@ const RadarData = ({ player, statType, minValue, maxValue }) => {
             }
         })
 
-        const AllPRQuery = query(
+        const BestOverallQuery = query(
             statRef,
             where("statType", "==", statType),
             where("statValue", ">", minValue),
@@ -79,24 +81,48 @@ const RadarData = ({ player, statType, minValue, maxValue }) => {
             limit(3)
         )
 
-        const unsubscribeTeamBest = onSnapshot(AllPRQuery, (snapshot) => {
+        const unsubscribeBestOverall = onSnapshot(BestOverallQuery, (snapshot) => {
             if (!snapshot.empty) {
-                setAllPR({ id: snapshot.docs[0].id, ...snapshot.docs[0].data() })
+                setBestOverall({ id: snapshot.docs[0].id, ...snapshot.docs[0].data() })
             }
         })
 
         return () => {
             unsubscribeLast()
             unsubscribeLowest()
-            unsubscribeTeamBest()
+            unsubscribeBestOverall()
         }
     }, [])
+
+    useEffect(() => {
+        const BestActive = query(
+            statRef,
+            statRef,
+            where("statType", "==", statType),
+            where("statValue", ">", minValue),
+            where("statValue", "<", maxValue),
+            where("team", "in", selectedTeams),
+            orderBy("statValue", "desc"),
+            limit(3)
+        )
+
+        const unsubscribeBestActive = onSnapshot(BestActive, (snapshot) => {
+            if (!snapshot.empty) {
+                setBestActive({ id: snapshot.docs[0].id, ...snapshot.docs[0].data() })
+            }
+        })
+
+        return () => {
+            unsubscribeBestActive()
+        }
+    }, [selectedTeams])
 
     const handleAddStat = async (value) => {
         if (value < maxValue && value > minValue) {
             setTimeError(false)
             await addDoc(collection(firestoreDB, collectionName), {
                 playerId: player.id,
+                team: player.team?.teamName,
                 statType: statType,
                 statValue: value,
                 dateAdded: new Date().toLocaleString(),
@@ -123,7 +149,8 @@ const RadarData = ({ player, statType, minValue, maxValue }) => {
     return (
         <PlayerGameRow
             player={player}
-            allPRValue={player.id === allPR?.playerId ? `${allPR?.statValue}mph` : null}
+            bestActiveValue={player.id === bestActive?.playerId ? `${bestActive?.statValue}mph` : null}
+            bestOverallValue={player.id === bestOverall?.playerId ? `${bestOverall?.statValue}mph` : null}
             prValue={pr ? `${pr?.statValue}mph` : null}
             lastRecordValue={pr ? `${lastRecord?.statValue}mph` : null}
             error={timeError}

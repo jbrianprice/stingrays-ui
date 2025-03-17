@@ -8,14 +8,17 @@ import { History, Trophy } from "lucide-react"
 import { formatTime } from "./stopWatch"
 import { useNavigate } from "react-router-dom"
 import PlayerGameRow from "./playerGameRow"
+import { useTeamContext } from "../utils/useTeamContext"
 
 const PlayerStopWath = ({ player, statType, minValue = 2.5, maxValue = 5.5 }) => {
     const [lastRecord, setLastRecord] = useState()
     const [pr, setPR] = useState()
     const [prs, setPRS] = useState()
-    const [allPR, setAllPR] = useState()
+    const [bestActive, setBestActive] = useState()
+    const [bestOverall, setBestOverall] = useState()
     const [timeError, setTimeError] = useState()
     const [celebrate, isCelebrate] = useState()
+    const { selectedTeams } = useTeamContext()
 
     const navigate = useNavigate()
 
@@ -23,11 +26,10 @@ const PlayerStopWath = ({ player, statType, minValue = 2.5, maxValue = 5.5 }) =>
     // const weather = useWeather()
 
     const collectionName = "stats"
+    // Reference to the Firestore collection
+    const statRef = collection(firestoreDB, collectionName)
 
     useEffect(() => {
-        // Reference to the Firestore collection
-        const statRef = collection(firestoreDB, collectionName)
-
         const lastRecordQuery = query(
             statRef,
             where("playerId", "==", player.id),
@@ -68,7 +70,7 @@ const PlayerStopWath = ({ player, statType, minValue = 2.5, maxValue = 5.5 }) =>
             }
         })
         
-        const AllPRQuery = query(
+        const BestOverall = query(
             statRef,
             where("statType", "==", statType),
             where("statValue", ">", minValue * 1000), // convert seconds to milliseconds
@@ -77,24 +79,47 @@ const PlayerStopWath = ({ player, statType, minValue = 2.5, maxValue = 5.5 }) =>
             limit(3)
         )
 
-        const unsubscribeTeamBest = onSnapshot(AllPRQuery, (snapshot) => {
+        const unsubscribeBestOverall = onSnapshot(BestOverall, (snapshot) => {
             if (!snapshot.empty) {
-                setAllPR({ id: snapshot.docs[0].id, ...snapshot.docs[0].data() })
+                setBestOverall({ id: snapshot.docs[0].id, ...snapshot.docs[0].data() })
             }
         })
 
         return () => {
             unsubscribeLast()
             unsubscribeLowest()
-            unsubscribeTeamBest()
+            unsubscribeBestOverall()
         }
     }, [])
+
+    useEffect(()=> {
+        const BestActive = query(
+            statRef,
+            where("statType", "==", statType),
+            where("statValue", ">", minValue * 1000), // convert seconds to milliseconds
+            where("statValue", "<", maxValue * 1000), // convert seconds to milliseconds
+            where("team", "in", selectedTeams),
+            orderBy("statValue", "asc"),
+            limit(3)
+        )
+
+        const unsubscribeBestActive = onSnapshot(BestActive, (snapshot) => {
+            if (!snapshot.empty) {
+                setBestActive({ id: snapshot.docs[0].id, ...snapshot.docs[0].data() })
+            }
+        })
+
+        return () => {
+            unsubscribeBestActive()
+        }
+    }, [selectedTeams])
 
     const handleAddStat = async (value) => {
         if (value < maxValue * 1000 && value > minValue * 1000) {
             setTimeError(false)
             await addDoc(collection(firestoreDB, collectionName), {
                 playerId: player.id,
+                team: player.team?.teamName,
                 statType: statType,
                 statValue: value,
                 dateAdded: new Date().toLocaleString(),
@@ -121,7 +146,8 @@ const PlayerStopWath = ({ player, statType, minValue = 2.5, maxValue = 5.5 }) =>
     return (
         <PlayerGameRow
             player={player}
-            allPRValue={player.id === allPR?.playerId ? formatTime(allPR?.statValue) : null}
+            bestActiveValue={player.id === bestActive?.playerId ? formatTime(bestActive?.statValue) : null}
+            bestOverallValue={player.id === bestOverall?.playerId ? formatTime(bestOverall?.statValue) : null}
             prValue={pr ? formatTime(pr?.statValue) : null}
             lastRecordValue={pr ? formatTime(lastRecord?.statValue) : null}
             error={timeError}

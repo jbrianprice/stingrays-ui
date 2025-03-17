@@ -3,8 +3,10 @@ import { Trophy, History, Medal, Crown } from "lucide-react"
 
 const PlayerGameRow = ({
     player,
-    allPRLabel = "Team leader",
-    allPRValue,
+    bestOverallLabel = "Best ever",
+    bestOverallValue,
+    bestActiveLabel = "Team leader",
+    bestActiveValue,
     prLabel = "Personal best",
     prValue,
     lastLabel = "Last try",
@@ -15,6 +17,26 @@ const PlayerGameRow = ({
     celebrate,
 }) => {
     const navigate = useNavigate()
+
+    const getPRLabel = () => {
+        let label = prLabel
+        let value = prValue
+        let icon = <Medal size="1rem" className="flex-none text-amber-400" />
+        if (bestOverallValue) {
+            label = bestOverallLabel
+            value = bestOverallValue
+            icon = <Crown size="1rem" className="flex-none text-amber-400" />
+        }
+        else if (bestActiveValue) {
+            label = bestActiveLabel
+            value = bestActiveValue
+            icon = <Trophy size="1rem" className="flex-none text-amber-400" />
+        }
+
+        return { label, value, icon }
+    }
+
+    const { label, value, icon } = getPRLabel()
 
     return (
         <li
@@ -34,19 +56,13 @@ const PlayerGameRow = ({
                     </div>
                 </div>
                 <div className="flex flex-col items-end text-sm text-slate-500 font-extrabold">
-                    {(allPRValue || prValue) && (
+                    {(bestOverallValue || prValue || bestActiveValue) && (
                         <p className={`flex items-center gap-1`}>
                             <span className="flex whitespace-nowrap items-center gap-2">
-                                <span className="font-normal hidden md:block">
-                                    {allPRValue ? allPRLabel : prLabel}
-                                </span>
-                                {allPRValue ? (
-                                    <Crown size="1rem" className="flex-none text-amber-400" />
-                                ) : (
-                                    <Medal size="1rem" className="flex-none text-amber-400" />
-                                )}
+                                <span className="font-normal hidden md:block">{label}</span>
+                                {icon}
                             </span>
-                            {allPRValue ?? prValue}
+                            {value}
                         </p>
                     )}
                     {lastRecordValue && (
