@@ -34,9 +34,7 @@ export default function AddPlayer({
     const [addTeam, showAddTeam] = useState(false)
     const [required, showRequired] = useState(true)
     const [deleteModal, showDeleteModal] = useState(false)
-
-    console.log(playerData.firstName)
-
+    
     useEffect(() => {
         setFormData({ ...formData, positions: selectedPositions })
     }, [selectedPositions])

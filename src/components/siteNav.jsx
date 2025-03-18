@@ -15,7 +15,7 @@ export default function SiteNav() {
     },[location])
 
     return (
-        <nav className="relative text-white p-4 w-full dark:bg-cyan-950 bg-cyan-50 backdrop-invert backdrop-opacity-10">
+        <nav className="relative text-white p-4 w-full dark:bg-cyan-950 bg-cyan-50 backdrop-invert backdrop-opacity-10 z-40">
             <div className="container mx-auto flex items-center justify-between md:justify-normal">
                 <button className="contents" onClick={() => navigate("/")}>
                     <img className="max-w-2/3 max-h-12 hidden dark:block" src={logoDark} />

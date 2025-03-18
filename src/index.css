@@ -142,3 +142,7 @@ button.card,
 .card p {
   @apply text-sm text-slate-600 text-balance
 }
+
+.border-light {
+  @apply border-slate-200 dark:border-slate-800
+}
