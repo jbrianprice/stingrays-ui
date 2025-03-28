@@ -1,4 +1,3 @@
-import Stopwatch from "../components/stopWatch"
 import { gamesMeta } from "../constants/games"
 import { useNavigate } from "react-router-dom"
 
@@ -15,7 +14,6 @@ const Games = () => {
                     </button>
                 ))}
             </div>
-            <Stopwatch />
         </>
     )
 }
