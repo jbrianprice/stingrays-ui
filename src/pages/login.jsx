@@ -10,6 +10,9 @@ import {
     sendPasswordResetEmail,
 } from "firebase/auth"
 import { app, auth } from "../firebaseConfig" // Assuming you have a firebaseConfig.js file
+import logo from "../assets/logo2.svg"
+import logoDark from "../assets/logo-on-dark.svg"
+import googleLogo from "../assets/Google__G__logo.svg"
 
 const LoginScreen = () => {
     const [email, setEmail] = useState("")
@@ -18,13 +21,11 @@ const LoginScreen = () => {
     const [isSignUp, setIsSignUp] = useState(false)
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
-    const [message, setMessage] = useState(null);
+    const [message, setMessage] = useState(null)
 
     const googleProvider = new GoogleAuthProvider() // Create a GoogleAuthProvider instance
 
     const handleLogin = async (e) => {
-        console.log(email, password)
-
         e.preventDefault()
         setError("")
         setLoading(true)
@@ -101,72 +102,69 @@ const LoginScreen = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-            <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-                <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
-                    {isSignUp ? "Sign Up" : "Login"}
-                </h2>
-                <form onSubmit={isSignUp ? handleSignUp : handleLogin}>
-                    <div className="mb-4">
-                        <label
+        <div className=" min-h-screen flex flex-col items-center relative">
+            <div className=" player-bg mx-auto py-8 w-full dark:bg-cyan-950 bg-cyan-50">
+                <img className="mx-auto max-w-2/3 max-h-12 hidden dark:block" src={logoDark} />
+                <img className="mx-auto max-w-2/3 max-h-12 block dark:hidden" src={logo} />
+                <p className="text-center pt-8 text-cyan-800 dark:text-cyan-400">A simple app for collecting player metrics</p>
+            </div>
+            <div className="p-8 w-full h-max max-w-md">
+                <div className="flex flex-col gap-4 items-center">
+                    <form onSubmit={isSignUp ? handleSignUp : handleLogin}>
+                        <div className="w-full">
+                            {/* <label
                             htmlFor="email"
                             className="block text-gray-700 text-sm font-bold mb-2"
                         >
                             Email
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Your email"
-                            required
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <label
+                        </label> */}
+                            <input
+                                type="email"
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Your email"
+                                required
+                            />
+                        </div>
+                        <div className="w-full">
+                            {/* <label
                             htmlFor="password"
                             className="block text-gray-700 text-sm font-bold mb-2"
                         >
                             Password
-                        </label>
-                        <input
-                            type="password"
-                            id="password"
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Your password"
-                            required
-                        />
-                    </div>
+                        </label> */}
+                            <input
+                                type="password"
+                                id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Your password"
+                                required
+                            />
+                        </div>
 
-                    {isSignUp && (
-                        <div className="mb-6">
-                            <label
+                        {isSignUp && (
+                            <div className="w-full">
+                                {/* <label
                                 htmlFor="confirmPassword"
                                 className="block text-gray-700 text-sm font-bold mb-2"
                             >
                                 Confirm Password
-                            </label>
-                            <input
-                                type="password"
-                                id="confirmPassword"
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                placeholder="Confirm your password"
-                                required
-                            />
-                        </div>
-                    )}
+                            </label> */}
+                                <input
+                                    type="password"
+                                    id="confirmPassword"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    placeholder="Confirm your password"
+                                    required
+                                />
+                            </div>
+                        )}
 
-                    <div className="flex items-center justify-between">
                         <button
-                            className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${
-                                loading ? "opacity-50 cursor-not-allowed" : ""
-                            }`}
+                            className={`w-full ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                             type="submit"
                             disabled={loading}
                         >
@@ -181,47 +179,42 @@ const LoginScreen = () => {
                         {!isSignUp && (
                             <button
                                 onClick={() => handleForgotPassword()}
-                                className="tertiary inline-block align-baseline font-semibold text-sm text-blue-500 hover:text-blue-800"
+                                className="tertiary self-center text-sm"
                                 href="#" // Replace with your "forgot password" link
                             >
                                 Forgot Password?
                             </button>
                         )}
-                    </div>
-                    {error && <p className="text-red-500 text-xs italic mt-4">{error}</p>}
-                    {message && <p className="text-green-500 text-sm mb-2">{message}</p>}
-                </form>
-
-                <div className="mt-6">
-                    <div className="relative">
-                        <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-gray-300"></div>
-                        </div>
-                        <div className="relative flex justify-center text-sm leading-5">
-                            <span className="bg-white px-2 text-gray-500">Or continue with</span>
-                        </div>
-                    </div>
-
-                    <button
-                        type="button"
-                        onClick={handleGoogleSignIn}
-                        className={`mt-4 w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${
-                            loading ? "opacity-50 cursor-not-allowed" : ""
-                        }`}
-                        disabled={loading}
-                    >
-                        Sign in with Google
-                    </button>
+                        {error && <p className="text-red-500 text-xs italic mt-4">{error}</p>}
+                        {message && <p className="text-green-500 text-sm mb-2">{message}</p>}
+                    </form>
                 </div>
 
-                <p className="text-center text-gray-600 text-xs mt-4">
+                <div className="flex items-center gap-2 w-full my-6 text-sm font-semibold text-slate-600 dark:text-slate-400">
+                    <div className="h-px w-full bg-light" />
+                    <span> Or </span>
+                    <div className="h-px w-full bg-light" />
+                </div>
+                <button
+                    type="button"
+                    onClick={handleGoogleSignIn}
+                    className={`secondary flex items-center gap-2 mx-auto ${
+                        loading ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                    disabled={loading}
+                >
+                    <img src={googleLogo} className="h-4" />
+                    Sign in with Google
+                </button>
+
+                <p className="text-center text-xs mt-4 text-slate-600 dark:text-slate-400">
                     {isSignUp ? (
                         <>
                             Already have an account?{" "}
                             <button
                                 type="button"
                                 onClick={toggleSignUp}
-                                className="font-semibold text-blue-500 hover:text-blue-800 focus:outline-none"
+                                className="tertiary text-sm"
                             >
                                 Log In
                             </button>
@@ -232,7 +225,7 @@ const LoginScreen = () => {
                             <button
                                 type="button"
                                 onClick={toggleSignUp}
-                                className="font-semibold text-blue-500 hover:text-blue-800 focus:outline-none"
+                                className="tertiary text-sm"
                             >
                                 Sign Up
                             </button>

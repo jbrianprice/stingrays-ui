@@ -1,148 +1,160 @@
 @import "tailwindcss";
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
 
-  color-scheme: light dark;
+    color-scheme: light dark;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  @apply text-stone-950 dark:text-white
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    @apply text-stone-950 dark:text-white;
 }
 
 body {
-  @apply bg-slate-100 dark:text-white dark:bg-neutral-900 m-0  text-neutral-950
+    @apply bg-slate-100 dark:text-white dark:bg-neutral-900 m-0  text-neutral-950;
 }
 
 h2 {
-  @apply text-2xl font-light
+    @apply text-2xl font-light;
 }
 
-form { 
-  display: contents;
+form {
+    display: contents;
 }
 
 a {
-  @apply text-cyan-700 no-underline
+    @apply text-cyan-700 no-underline;
 }
 a:hover {
-  @apply text-cyan-800 dark:text-cyan-400
+    @apply text-cyan-800 dark:text-cyan-400;
 }
 
 body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
 }
 
 h1 {
-  @apply text-2xl md:text-4xl
+    @apply text-2xl md:text-4xl;
 }
 
 button,
 button.primary {
-  @apply cursor-pointer rounded-lg py-2 px-4 font-semibold transition-colors duration-75 bg-cyan-700 text-white 
+    @apply cursor-pointer rounded-full py-2 px-4 font-semibold transition-colors duration-75 bg-cyan-700 text-white;
 }
 
 button:hover,
 button.primary:hover {
-  @apply bg-cyan-950 dark:bg-cyan-400
+    @apply bg-cyan-950 dark:bg-cyan-400;
 }
 
-button.tertiary, 
+button.tertiary,
 button.secondary {
-  @apply  text-cyan-700 border-cyan-700 bg-transparent
+    @apply text-cyan-700 border-cyan-700 bg-transparent;
 }
 
 button.card:hover,
 button.tertiary:hover,
 button.secondary:hover {
-  @apply text-cyan-950 border-cyan-950 dark:text-cyan-400 dark:border-cyan-400
+    @apply text-cyan-950 border-cyan-950 dark:text-cyan-400 dark:border-cyan-400;
 }
 
 button.tertiary {
-  @apply px-0
+    @apply px-0;
 }
 
 button.secondary {
-  @apply border 
+    @apply border;
 }
-
 
 button:focus,
 button:focus-visible {
-  @apply outline-4
+    @apply outline-4;
 }
 
 .input-wrapper {
-  @apply w-full flex flex-col gap-1
+    @apply w-full flex flex-col gap-1;
 }
 
 label {
-  @apply text-sm text-stone-600 dark:text-stone-400 font-semibold
+    @apply text-sm text-stone-600 dark:text-stone-400 font-semibold;
 }
 
-input, select {
-  @apply rounded-md border border-stone-300 p-2 block w-full
+input,
+select {
+    @apply rounded-full border border-stone-300 dark:border-stone-800 p-2 px-4 block w-full;
 }
-input[type ='checkbox'], input[type ='radio'] {
-  @apply rounded-none border-none p-2 block w-auto
+input[type="checkbox"],
+input[type="radio"] {
+    @apply rounded-none border-none p-2 block w-auto;
 }
-input:focus, select:focus {
-  @apply shadow-md;
+input:focus,
+select:focus {
+    @apply rounded-full shadow-none border px-4;
 }
-
 
 input.error,
 input.invalid,
-input:required:invalid, 
+input:required:invalid,
 select:required:invalid {
-  @apply border-red-800
+    @apply bg-slate-50 dark:bg-stone-900;
 }
 
 select:required:invalid {
-  color: gray;
+    color: gray;
 }
 option[disabled] {
-  display: none;
+    display: none;
 }
 
 *::placeholder,
-option[value=''][disabled] {
-  @apply text-neutral-500
+option[value=""][disabled] {
+    @apply text-neutral-500;
 }
 
 .badge {
-  @apply rounded-xl py-0.5 px-2  bg-cyan-300 font-semibold text-stone-800
+    @apply rounded-xl py-0.5 px-2  bg-cyan-300 font-semibold text-stone-800;
 }
 
 .error-message {
-  @apply text-sm text-red-800
+    @apply text-sm text-red-800;
 }
 
 button.card,
 .static-card,
 .card {
-  @apply shadow rounded-lg bg-white dark:bg-neutral-950 p-4
+    @apply shadow rounded-lg bg-white dark:bg-neutral-950 p-4;
 }
 
 .card:hover {
-  @apply -translate-y-0.5 shadow-md
+    @apply -translate-y-0.5 shadow-md;
 }
 
 .static-card h3,
 .card h3 {
-  @apply font-thin text-2xl
+    @apply font-thin text-2xl;
 }
 
 .card p {
-  @apply text-sm text-slate-600 text-balance
+    @apply text-sm text-slate-600 text-balance;
 }
 
 .border-light {
-  @apply border-slate-200 dark:border-slate-800
+    @apply border-slate-200 dark:border-slate-800;
+}
+
+.bg-light {
+    @apply bg-slate-200 dark:bg-slate-800;
+}
+
+.player-bg {
+    background-image: url("./assets/player.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right;
 }

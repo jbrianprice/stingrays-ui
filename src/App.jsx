@@ -7,7 +7,8 @@ import { useAuth } from "./utils/authProvider";
 function App() {
     const { user } = useAuth();
 
-    console.log(user)
+    if (!user) return <LoginScreen />
+
     return (
         <>
             <TeamProvider>
