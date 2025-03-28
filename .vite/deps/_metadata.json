@@ -2,54 +2,54 @@
   "hash": "da22006e",
   "configHash": "c03e816b",
   "lockfileHash": "641120c9",
-  "browserHash": "be3f6c26",
+  "browserHash": "4db24332",
   "optimized": {
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "a24b4233",
+      "fileHash": "24af821a",
       "needsInterop": true
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "527dd1c8",
+      "fileHash": "dba03cc0",
       "needsInterop": true
     },
     "react-router-dom": {
       "src": "../../node_modules/react-router-dom/dist/index.js",
       "file": "react-router-dom.js",
-      "fileHash": "f0fbf1cb",
-      "needsInterop": false
-    },
-    "firebase/firestore": {
-      "src": "../../node_modules/firebase/firestore/dist/esm/index.esm.js",
-      "file": "firebase_firestore.js",
-      "fileHash": "0054202a",
-      "needsInterop": false
-    },
-    "lucide-react": {
-      "src": "../../node_modules/lucide-react/dist/esm/lucide-react.js",
-      "file": "lucide-react.js",
-      "fileHash": "c0fe78e8",
-      "needsInterop": false
-    },
-    "firebase/app": {
-      "src": "../../node_modules/firebase/app/dist/esm/index.esm.js",
-      "file": "firebase_app.js",
-      "fileHash": "8a8be068",
-      "needsInterop": false
-    },
-    "react-select": {
-      "src": "../../node_modules/react-select/dist/react-select.esm.js",
-      "file": "react-select.js",
-      "fileHash": "59a7e5fd",
+      "fileHash": "61f2b42e",
       "needsInterop": false
     },
     "firebase/auth": {
       "src": "../../node_modules/firebase/auth/dist/esm/index.esm.js",
       "file": "firebase_auth.js",
-      "fileHash": "17503689",
+      "fileHash": "848511df",
+      "needsInterop": false
+    },
+    "firebase/app": {
+      "src": "../../node_modules/firebase/app/dist/esm/index.esm.js",
+      "file": "firebase_app.js",
+      "fileHash": "96c1e19a",
+      "needsInterop": false
+    },
+    "firebase/firestore": {
+      "src": "../../node_modules/firebase/firestore/dist/esm/index.esm.js",
+      "file": "firebase_firestore.js",
+      "fileHash": "61190567",
+      "needsInterop": false
+    },
+    "lucide-react": {
+      "src": "../../node_modules/lucide-react/dist/esm/lucide-react.js",
+      "file": "lucide-react.js",
+      "fileHash": "a1e0f7a0",
+      "needsInterop": false
+    },
+    "firebase/database": {
+      "src": "../../node_modules/firebase/database/dist/esm/index.esm.js",
+      "file": "firebase_database.js",
+      "fileHash": "7ea3ef02",
       "needsInterop": false
     }
   },
@@ -60,8 +60,8 @@
     "chunk-2GK3IQSO": {
       "file": "chunk-2GK3IQSO.js"
     },
-    "chunk-UPJ66ANQ": {
-      "file": "chunk-UPJ66ANQ.js"
+    "chunk-BPB46QEM": {
+      "file": "chunk-BPB46QEM.js"
     },
     "chunk-G3PMV62Z": {
       "file": "chunk-G3PMV62Z.js"

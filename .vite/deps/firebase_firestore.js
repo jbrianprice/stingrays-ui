@@ -17,7 +17,7 @@ import {
   isIndexedDBAvailable,
   isSafari,
   registerVersion
-} from "./chunk-UPJ66ANQ.js";
+} from "./chunk-BPB46QEM.js";
 import "./chunk-G3PMV62Z.js";
 
 // node_modules/@firebase/webchannel-wrapper/dist/bloom-blob/esm/bloom_blob_es2018.js
