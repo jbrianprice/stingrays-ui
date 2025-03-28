@@ -230,7 +230,7 @@ export default function AddPlayer({
                                 name="team"
                                 onChange={(e) => handleChange(e)}
                                 onBlur={(e) => handleChange(e)}
-                                value={JSON.stringify(formData.team)}
+                                defaultValue={JSON.stringify(formData.team)}
                             >
                                 <option value="" disabled selected>
                                     Select an option...

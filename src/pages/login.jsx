@@ -102,13 +102,13 @@ const LoginScreen = () => {
     }
 
     return (
-        <div className=" min-h-screen flex flex-col items-center relative">
-            <div className=" player-bg mx-auto py-8 w-full dark:bg-cyan-950 bg-cyan-50">
+        <div className="h-screen flex flex-col items-center relative">
+            <div className="flex flex-col justify-center player-bg mx-auto py-8 h-[inherit] w-full dark:bg-cyan-950 bg-cyan-50">
                 <img className="mx-auto max-w-2/3 max-h-12 hidden dark:block" src={logoDark} />
                 <img className="mx-auto max-w-2/3 max-h-12 block dark:hidden" src={logo} />
                 <p className="text-center pt-8 text-cyan-800 dark:text-cyan-400">A simple app for collecting player metrics</p>
             </div>
-            <div className="p-8 w-full h-max max-w-md">
+            <div className="p-8 py-12 w-full max-w-md">
                 <div className="flex flex-col gap-4 items-center">
                     <form onSubmit={isSignUp ? handleSignUp : handleLogin}>
                         <div className="w-full">

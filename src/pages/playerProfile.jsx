@@ -97,8 +97,8 @@ const PlayerProfile = () => {
     return (
         <div>
             <BreadCrumb label="Full roster" path="/roster" />
-            <div className="flex flex-col items-centerx md:flex-row gap-2 mx-auto mb-2 pb-6 border-b border-light">
-                <CircleUserRound size={"100px"} />
+            <div className="flex flex-col items-centerx gap-2 mx-auto mb-2 pb-6 border-b border-light">
+                {/* <CircleUserRound size={"100px"} /> */}
                 <div className="flex gap-2">
                     <div className="badge self-center">{number}</div>
                     <h2 className="text-3xl! font-semibold!">

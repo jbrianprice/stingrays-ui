@@ -30,9 +30,7 @@ const RadarData = ({ player, statType, minValue, maxValue }) => {
     // Reference to the Firestore collection
     const collectionName = "stats"
     const statRef = collection(firestoreDB, collectionName)
-
-    console.log(lastRecord)
-
+    
     useEffect(() => {
         const lastRecordQuery = query(
             statRef,

@@ -36,7 +36,7 @@ export default function SiteNav() {
                     <Link className="py-2 px-4 rounded-md hover:bg-cyan-200" to={"/roster"}>
                         Roster
                     </Link>
-                    <a className="py-2 px-4 rounded-md hover:bg-cyan-200">
+                    <a className="py-2 px-4 rounded-md cursor-pointer hover:bg-cyan-200">
                         <LogoutButton />
                     </a>
                 </div>

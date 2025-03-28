@@ -153,8 +153,9 @@ button.card,
 }
 
 .player-bg {
-    background-image: url("./assets/player.svg");
+    background-image: url("./assets/hit4.svg");
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: right;
+    background-position: center;
+    background-blend-mode: overlay;
 }
