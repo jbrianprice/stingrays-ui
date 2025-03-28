@@ -31,6 +31,8 @@ const RadarData = ({ player, statType, minValue, maxValue }) => {
     const collectionName = "stats"
     const statRef = collection(firestoreDB, collectionName)
 
+    console.log(lastRecord)
+
     useEffect(() => {
         const lastRecordQuery = query(
             statRef,
@@ -142,6 +144,10 @@ const RadarData = ({ player, statType, minValue, maxValue }) => {
         }, 250)
     }, [celebrate])
 
+    useEffect(() => {
+        if (lastRecord?.statValue) setSpeed(lastRecord?.statValue ?? 40)
+    }, [lastRecord])
+
     const handleIncrement = (value) => {
         if (speed + value <= maxValue && speed + value >= minValue) setSpeed(speed + value)
     }
@@ -149,8 +155,12 @@ const RadarData = ({ player, statType, minValue, maxValue }) => {
     return (
         <PlayerGameRow
             player={player}
-            bestActiveValue={player.id === bestActive?.playerId ? `${bestActive?.statValue}mph` : null}
-            bestOverallValue={player.id === bestOverall?.playerId ? `${bestOverall?.statValue}mph` : null}
+            bestActiveValue={
+                player.id === bestActive?.playerId ? `${bestActive?.statValue}mph` : null
+            }
+            bestOverallValue={
+                player.id === bestOverall?.playerId ? `${bestOverall?.statValue}mph` : null
+            }
             prValue={pr ? `${pr?.statValue}mph` : null}
             lastRecordValue={pr ? `${lastRecord?.statValue}mph` : null}
             error={timeError}
